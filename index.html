@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#e6e9ef">
+<!-- Only this site, the Supabase CDN bundle and Google Fonts may load/run. Blocks injected scripts. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script src="js/theme-init.js"></script>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>eFootball Championship — Live Fixtures &amp; Bracket</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="install-banner" id="installBanner" hidden>
+  <img src="icons/icon-192.png" alt="" class="install-banner-icon">
+  <div class="install-banner-text">
+    <strong>Install eFootball Championship</strong>
+    <span>Add it to your home screen for quick access.</span>
+  </div>
+  <button type="button" class="btn btn-primary" id="installBtn">Install</button>
+  <button type="button" class="install-banner-close" id="installDismiss" aria-label="Dismiss">&times;</button>
+</div>
+
+<header class="topbar">
+  <a class="brand" href="./">
+    <span class="dot"></span>
+    <span id="tournamentName">eFootball Championship</span>
+  </a>
+  <nav class="tabs" id="topTabs" aria-label="Main"></nav>
+  <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8"/></svg>
+  </button>
+</header>
+
+<nav class="bottom-nav" aria-label="Main (mobile)">
+  <div class="bottom-nav-inner" id="bottomTabs"></div>
+</nav>
+
+<main class="shell">
+
+  <!-- HOME: who plays today / tomorrow -->
+  <section id="homeView" class="view active">
+    <div class="hero">
+      <div class="eyebrow"><span class="live-pulse"></span> <span id="tournamentStatus">Loading…</span></div>
+      <div id="championBanner" class="glass glass-strong champ-banner" hidden>
+        <span class="champ-cup">🏆</span>
+        <div>
+          <div class="hint champ-kicker">Champion</div>
+          <button type="button" class="team-link champ-name" id="championName"></button>
+        </div>
+      </div>
+    </div>
+    <div id="homeMine"></div>
+    <div id="homeFeed"><div class="empty-state"><span class="loader"></span></div></div>
+  </section>
+
+  <section id="groupsView" class="view">
+    <div class="section-head">
+      <h2>Group stage</h2>
+      <span class="sub" id="groupsSub">Top teams from each group advance to the knockouts</span>
+    </div>
+    <div id="groupsWrap"></div>
+  </section>
+
+  <section id="bracketView" class="view">
+    <div class="section-head">
+      <h2>Knockout draw</h2>
+      <span class="sub" id="bracketRoundPill"></span>
+    </div>
+    <div id="bracketWrap"></div>
+  </section>
+
+  <section id="teamsView" class="view">
+    <div class="section-head">
+      <h2>Teams</h2>
+      <span class="sub">Tap a team for its table position, results and opponents</span>
+    </div>
+    <div class="field" style="max-width:340px;">
+      <input id="teamsSearch" type="search" placeholder="Search teams…" autocomplete="off" aria-label="Search teams">
+    </div>
+    <div id="teamsGrid" class="teams-grid"></div>
+  </section>
+
+  <!-- MY TEAM: register, sign in, submit result -->
+  <section id="meView" class="view">
+    <div id="meBody"></div>
+  </section>
+
+  <div class="footer">Built for the community · A result is official only once the admin has approved it.</div>
+</main>
+
+<!-- Shown ONCE after registering -->
+<div class="modal-backdrop" id="codeModal">
+  <div class="glass modal">
+    <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+    <h3>You're in, <span id="revealedTeamName"></span> 🎮</h3>
+    <p class="hint" id="revealedNote"></p>
+    <div class="code-reveal" id="revealedCode"></div>
+    <div class="pill-row" style="margin-bottom:12px;">
+      <button type="button" class="btn btn-sm" id="copyCodeBtn">Copy code</button>
+    </div>
+    <p class="hint">Keep a screenshot of this code. It is stored only as a scrambled hash on our side, so it can't be shown again — if you lose it, the admin can issue a new one.</p>
+    <button class="btn btn-primary btn-block" data-close-modal style="margin-top:14px;">Got it</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="forgotModal">
+  <div class="glass modal">
+    <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+    <h3>Lost your code?</h3>
+    <p class="hint" style="font-size:.86rem; line-height:1.6;">For everyone's security, codes are stored scrambled — nobody can read your old one. Message the tournament admin: they will verify you and issue a <strong>new code</strong>. Enter it once and this phone remembers it.</p>
+    <button class="btn btn-primary btn-block" data-close-modal style="margin-top:14px;">OK</button>
+  </div>
+</div>
+
+<!-- Team profile: table position, results, opponents -->
+<div class="modal-backdrop" id="teamProfileModal">
+  <div class="glass modal modal-wide">
+    <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+    <div id="teamProfileBody"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
