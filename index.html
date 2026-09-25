@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#e6e9ef">
-<!-- Only this site, the Supabase CDN bundle and Google Fonts may load/run. Blocks injected scripts. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="js/theme-init.js"></script>
@@ -44,12 +43,18 @@
 
 <main class="shell">
 
-  <!-- HOME: who plays today / tomorrow -->
   <section id="homeView" class="view active">
     <div class="hero">
       <div class="eyebrow"><span class="live-pulse"></span> <span id="tournamentStatus">Loading…</span></div>
       <div id="championBanner" class="glass glass-strong champ-banner" hidden>
-        <span class="champ-cup">🏆</span>
+        <svg class="champ-cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 3h8v4a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3Z"/>
+          <path d="M8 4H4.5A1.5 1.5 0 0 0 3 5.5 3.5 3.5 0 0 0 6.5 9H8"/>
+          <path d="M16 4h3.5A1.5 1.5 0 0 1 21 5.5 3.5 3.5 0 0 1 17.5 9H16"/>
+          <path d="M12 11v4"/>
+          <path d="M9 20h6"/>
+          <path d="M10 15h4l1 5h-6l1-5Z"/>
+        </svg>
         <div>
           <div class="hint champ-kicker">Champion</div>
           <button type="button" class="team-link champ-name" id="championName"></button>
@@ -87,7 +92,6 @@
     <div id="teamsGrid" class="teams-grid"></div>
   </section>
 
-  <!-- MY TEAM: register, sign in, submit result -->
   <section id="meView" class="view">
     <div id="meBody"></div>
   </section>
@@ -95,11 +99,18 @@
   <div class="footer">Built for the community · A result is official only once the admin has approved it.</div>
 </main>
 
-<!-- Shown ONCE after registering -->
 <div class="modal-backdrop" id="codeModal">
   <div class="glass modal">
     <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
-    <h3>You're in, <span id="revealedTeamName"></span> 🎮</h3>
+    <h3>
+      You're in, <span id="revealedTeamName"></span>
+      <svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.1em;height:1.1em;vertical-align:-0.15em;">
+        <rect x="2.5" y="8" width="19" height="9" rx="4.5"/>
+        <path d="M7.5 11v3M6 12.5h3"/>
+        <circle cx="15.5" cy="11.5" r="1"/>
+        <circle cx="18" cy="13.5" r="1"/>
+      </svg>
+    </h3>
     <p class="hint" id="revealedNote"></p>
     <div class="code-reveal" id="revealedCode"></div>
     <div class="pill-row" style="margin-bottom:12px;">
@@ -119,7 +130,6 @@
   </div>
 </div>
 
-<!-- Team profile: table position, results, opponents -->
 <div class="modal-backdrop" id="teamProfileModal">
   <div class="glass modal modal-wide">
     <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
